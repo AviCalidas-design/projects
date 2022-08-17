@@ -1,0 +1,5 @@
+jertheman,coconut,Jerry,Thomas,employee,1
+Heneri,pumpkin,Henry,Steen,customer,2
+avicalidas,hollywood,Avinash,Calidas,customer,3
+jumper,man,Mario,Luigi,customer,4
+horacio,kool,Horace,Jennings,both,5
