@@ -9,6 +9,7 @@ import revature.models.*;
 import revature.util.*;
 public class AccountDao {
     private static List<Account> unapproved = new ArrayList<Account>();
+    private static String log = new String();
     public void createAccount(Account account) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             
@@ -26,6 +27,14 @@ public class AccountDao {
             e.printStackTrace();
         }
         
+    }
+    public void updateLog(String addition)
+    {
+        log += addition + "\n";
+    }
+    public void printLog()
+    {
+        System.out.println(log);
     }
     public void addAccount(Account acc)
     {

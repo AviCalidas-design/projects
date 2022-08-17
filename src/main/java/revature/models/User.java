@@ -11,12 +11,11 @@ public class User {
     private String type;
     public User(String f, String l, String u, String p, String t)
     {
-        currentNum += 1;
         firstName = f;
         lastName = l;
         username = u;
         password = p;
-        id = currentNum;
+        id = 0;
         type = t;
     }
     public User(String u, String p)
@@ -24,6 +23,11 @@ public class User {
         username = u;
         password = p;
         id = -1;
+    }
+    public void giveId()
+    {
+        currentNum += 1;
+        id = currentNum;
     }
     public static void updateTotal(int x)
     {

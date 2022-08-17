@@ -7,7 +7,7 @@ import revature.models.Account;
 import revature.models.User;
 import revature.services.AccountService;
 import revature.util.InputUtil;
-import revature.dao.AccountDao;
+import revature.dao.*;
 public class UserActions {
     AccountService accountService = new AccountService();
     InputUtil inputUtil = new InputUtil();
@@ -18,7 +18,7 @@ public class UserActions {
         while(!done)
         {
             System.out.println("Hello " + user.getFirstName());
-            List<Account> yourAccounts = printAccounts(user);
+            List<Account> yourAccounts = printAccounts(user.getId());
             System.out.println("\n\nOptions:\n --Apply\n --View\n --Withdraw\n --Deposit\n --Transfer\n --Delete\n --Exit");
             String input = inputUtil.retrieveString("Command: ");
             try
@@ -41,6 +41,7 @@ public class UserActions {
                         int amount = inputUtil.retrieveInt("How much money to deposit?");
                         accountService.updateBalance(accountID, yourAccounts.get(i).getBalance() + amount);
                         System.out.println("Successfully deposited $" + amount);
+                        accountDao.updateLog(user.getFirstName() + " " + user.getLastName() + " deposited $" + amount + " into " + yourAccounts.get(i).getName());
                         break;
                     case "Withdraw":
                         Integer x = inputUtil.retrieveInt("Input the number of the account you'd like to withdraw from: ");
@@ -48,6 +49,7 @@ public class UserActions {
                         int amt = inputUtil.retrieveInt("How much money to withdraw?");
                         accountService.updateBalance(accountId, yourAccounts.get(x).getBalance() - amt);
                         System.out.println("Successfully withdrew $" + amt);
+                        accountDao.updateLog(user.getFirstName() + " " + user.getLastName() + " withdrew $" + amt + " from " + yourAccounts.get(x).getName());
                         break;
                     case "Transfer":
                         Integer from = inputUtil.retrieveInt("Input the number of the account you are transferring from: ");
@@ -58,6 +60,7 @@ public class UserActions {
                         accountService.updateBalance(f.getId(), f.getBalance() - y);
                         accountService.updateBalance(t.getId(), t.getBalance() + y);
                         System.out.println("Transfer complete!");
+                        accountDao.updateLog(user.getFirstName() + " " + user.getLastName() + " transferred $" + y + " from " + f.getName() + " to " + t.getName());
                         break;
                     case "Delete":
                         Integer which = inputUtil.retrieveInt("What number of account would you like to delete?");
@@ -100,7 +103,17 @@ public class UserActions {
                         System.out.println("Successfully approved account!");
                         break;
                     case "View Customer":
-                        
+                        int id = inputUtil.retrieveInt("Enter the ID of the customer you'd like to view");
+                        printAccounts(id);
+                        break;
+                    case "View Log":
+                        accountDao.printLog();
+                    case "Exit":
+                        done = true;
+                        break;
+                    default:
+                        System.out.println("Invalid input");
+                        break;
                 }
             }
             catch(Exception e)
@@ -120,9 +133,9 @@ public class UserActions {
             view_employee(user);
         }
     }
-    public List<Account> printAccounts(User user)
+    public List<Account> printAccounts(int userId)
     {
-        List<Account> yourAccounts = accountDao.getAccounts(user.getId());
+        List<Account> yourAccounts = accountDao.getAccounts(userId);
         System.out.println("Your accounts: ");
         for(int i = 0; i < yourAccounts.size(); i++)
         {

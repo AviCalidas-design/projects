@@ -34,6 +34,7 @@ public class UserService {
         User userFromDb = udao.findUser(userToCreate.getUsername());
 
         if(userFromDb == null){
+            userToCreate.giveId();
             udao.createUser(userToCreate);
             return userToCreate;
         }
